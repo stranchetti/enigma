@@ -44,6 +44,11 @@ bool Wheel::get_whl(char input, char* out) {
     ret = false;
   }
   char map = (pos + input) % 26;
+  //we require the positive result, which C++ will not give us if
+  //(pos + input) is negative
+  if (map < 0) {
+    map += 26;
+  }
   char letter = letters[map];
   cout << "letter before return: " << letter << endl;
   *out = letter - 'A' - pos;
@@ -52,7 +57,12 @@ bool Wheel::get_whl(char input, char* out) {
 
 //like get_whl, but works in reverse (goes from left side of wheel to right)
 void Wheel::get_whl_rev(char input, char* out) {
-  char in_letter = (pos + input) % 26 + 'A';
+  //smae workaround as before, since we need the positive result
+  char temp = (pos + input) % 26;
+  if (temp < 0) {
+    temp += 26;
+  }
+  char in_letter = temp + 'A';
   char index = letters.find(in_letter);
   cout << "letter before return: " << (char) (index + 'A') << endl;
   *out = index - pos;
