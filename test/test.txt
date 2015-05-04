@@ -1,0 +1,32 @@
+#simple test
+1 2 3
+A A A
+A
+
+#specific test
+1 2 3
+H D X
+C
+
+#check different wheels
+3 4 5
+Z F M
+B
+
+#garbage test
+aaaaaaaaaaaaaaaa 92 45 aslkhf
+19 a ?
+2 3 5
+abcbd 34 23 23 sdsf
+A a a
+B D S
+123 345
+v
+V
+A
+
+#translate test
+1 2 3
+A A A
+B
+

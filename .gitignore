@@ -1,0 +1,9 @@
+#all object files
+*.o
+
+#all backup files
+*~
+
+#executables
+engima
+*_test
