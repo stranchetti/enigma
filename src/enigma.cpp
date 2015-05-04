@@ -118,11 +118,11 @@ string Enigma::get_ref_letters() const {
 //translate a single charater and return it
 //helper function for translate()
 char Enigma::trans(char letter) {
-  wheels[2].whl_turn(); //initial turn of rightmost wheel
+  wheels[2].whl_turn();
   //send through steckerboard and make it initial wheel offset
   char input = stecker->get_char(letter) - 'A';
   cout << "input: " << int(input) << endl;
-  char out = 0; //just holds output of each wheel
+  char out = 0;
   //run letter through wheels from right to left
   for (int i = 2; i >= 0; i--) {
     if (wheels[i].get_whl(input, &out)) {
@@ -141,7 +141,6 @@ char Enigma::trans(char letter) {
     input = out;
     cout << "Wheel " << i + 1 << " Out: " << char(out + 'A' + wheels[i].get_pos()) << endl;
   }
-  //return out + 'A' + wheels[2].get_pos(); //convert from offset back to letter
   return stecker->get_char_rev(out);
 }
 
@@ -150,9 +149,15 @@ string Enigma::translate(string sentence) {
   size_t size = sentence.size();
   string ret;
   for (unsigned int i = 0; i < size; i++) {
-    char temp = trans(sentence[i]);
-    cout << "letter after translation: " << temp << endl;
-    ret.push_back(temp);
+    char let = sentence[i];
+    //only trnalsate vaild characters. Other things just fall through
+    if (let < 'A' || let > 'Z') {
+      ret.push_back(let);
+    } else {
+      char temp = trans(let);
+      cout << "letter after translation: " << temp << endl;
+      ret.push_back(temp);
+    }
   }
   return ret;
 }
@@ -160,5 +165,18 @@ string Enigma::translate(string sentence) {
 #ifndef TESTING
 int main() {
   Enigma test = Enigma();
+  string in;
+  bool done = false;
+  while (!done) {
+    cout << "Input line to be translated. Enter an empty line to finish." << endl;
+    cout << "> ";
+    getline(cin, in);
+    if (in != "") {
+      cout << test.translate(in) << endl;
+    } else {
+      done = true;
+    }
+  }
+  return 0;
 }
 #endif
