@@ -172,7 +172,7 @@ int main() {
     cout << "> ";
     getline(cin, in);
     if (in != "") {
-      cout << test.translate(in) << endl;
+      cout << RED << test.translate(in) << DEFAULT << endl;
     } else {
       done = true;
     }

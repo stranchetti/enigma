@@ -7,6 +7,10 @@
 #include "stecker.hpp"
 using namespace std;
 
+//terminal colors
+#define RED "\033[0;31m"
+#define DEFAULT "\033[0;39m"
+
 class Enigma {
   Wheel* wheels;
   Reflector* reflector;
