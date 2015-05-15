@@ -10,11 +10,26 @@
 
 using namespace Thilenius;
 
-ifstream t_file; //file holding tests
+ifstream t_file; //file holding test settings
+ifstream enc_file; //file holding encrypted messages
+ifstream dec_file; //file holding decrypted messages
 ofstream n_file; //dev null
 streambuf* in_orig; //cin stream
 streambuf* out_orig; //cout stream
 streambuf* d_null; //stream associated w/dev null
+
+string Readline(ifstream& file) {
+  string ret;
+  bool bad = true;
+  while (bad) {
+    getline(file, ret);
+    //skip over comments 
+    if (ret[0] != '#') {
+      bad = false;
+    }
+  }
+  return ret;
+}
 
 SUITE_BEGIN("Enigma Test")
 
@@ -123,11 +138,19 @@ TEST_BEGIN("translate()") {
   IsTrue("A third", test1.translate("A") == "Z", "A should map to Z as the third letter");
 } TEST_END
 
+TEST_BEGIN("Enigma Instuction Manual Test") {
+  SETUP(test1);
+  IsTrue("translation", test1.translate(Readline(enc_file)) == Readline(dec_file),
+         "the first encrypted message should decrypt to the first decrypted message");
+} TEST_END
+
 SUITE_END
 
 int main(int argc, char* argv[]) {
   t_file.open("test/test.txt");
   n_file.open("/dev/null");
+  enc_file.open("test/mess_enc.txt");
+  dec_file.open("test/mess_dec.txt");
   d_null = n_file.rdbuf();
   out_orig = cout.rdbuf();
   in_orig = cin.rdbuf(t_file.rdbuf());
