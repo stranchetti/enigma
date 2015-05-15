@@ -25,6 +25,7 @@ public:
   char get_wheel_pos(int whl) const;
   string get_wheel_letters(int whl) const;
   char get_wheel_turn(int whl) const;
+  char get_wheel_setting(int whl) const;
   string get_ref_letters() const;
   Wheel* init_wheels();
   Reflector* init_ref();

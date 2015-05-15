@@ -10,11 +10,13 @@ class Wheel {
   string letters;
   char turn;
   char pos;
+  char setting;
 public:
   Wheel();
-  Wheel(int number, char start);
+  Wheel(int number, char start, char set);
   char get_pos() const;
   char get_turn() const;
+  char get_setting() const;
   string get_letters() const;
   bool get_whl(char input, char* out);
   void get_whl_rev(char input, char* out);

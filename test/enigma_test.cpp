@@ -18,6 +18,7 @@ streambuf* in_orig; //cin stream
 streambuf* out_orig; //cout stream
 streambuf* d_null; //stream associated w/dev null
 
+//custom get line method to read message from files
 string Readline(ifstream& file) {
   string ret;
   bool bad = true;
@@ -42,18 +43,24 @@ TEST_BEGIN("1A, 2A, 3A, A") {
          "Wheel 1 should be at position A");
   IsTrue("Wheel 1: turn", test.get_wheel_turn(0) == w_version[0].second,
          "Wheel 1 should turnover at position R");
+  IsTrue("Wheel 1: setting", test.get_wheel_setting(0) == 0,
+         "Wheel 1 should have setting 0");
   IsTrue("Wheel 2: letters", test.get_wheel_letters(1) == w_version[1].first,
          "Wheel 2 should have the correct letters associated with it");
   IsTrue("Wheel 2: pos", test.get_wheel_pos(1) == 'A' - off,
          "Wheel 2 should be at position A");
   IsTrue("Wheel 2: turn", test.get_wheel_turn(1) == w_version[1].second,
          "Wheel 2 should turnover at position F");
+  IsTrue("Wheel 2: setting", test.get_wheel_setting(1) == 0,
+         "Wheel 2 should have setting 0");
   IsTrue("Wheel 3: letters", test.get_wheel_letters(2) == w_version[2].first,
          "Wheel 3 should have the correct letters associated with it");
   IsTrue("Wheel 3: pos", test.get_wheel_pos(2) == 'A' - off,
          "Wheel 3 should be at position A");
   IsTrue("Wheel 3: turn", test.get_wheel_turn(2) == w_version[2].second,
          "Wheel 3 should turnover at position W");
+  IsTrue("Wheel 3: setting", test.get_wheel_setting(2) == 0,
+         "Wheel 3 should have setting 0");
   IsTrue("Reflector", test.get_ref_letters() == r_version[0],
          "Reflector should have correct letters associated with it");
 } TEST_END
@@ -67,18 +74,24 @@ TEST_BEGIN("1H, 2D, 3X, C") {
          "Wheel 1 should be at position H");
   IsTrue("Wheel 1: turn", test.get_wheel_turn(0) == w_version[0].second,
          "Wheel 1 should turnover at position R");
+  IsTrue("wheel 1: setting", test.get_wheel_setting(0) == 5,
+         "Wheel 1 should have setting 5");
   IsTrue("Wheel 2: letters", test.get_wheel_letters(1) == w_version[1].first,
          "Wheel 2 should have the correct letters associated with it");
   IsTrue("Wheel 2: pos", test.get_wheel_pos(1) == 'D' - off,
          "Wheel 2 should be at position D");
   IsTrue("Wheel 2: turn", test.get_wheel_turn(1) == w_version[1].second,
          "Wheel 2 should turnover at position F");
+  IsTrue("Wheel 2: setting", test.get_wheel_setting(1) == 9,
+         "Wheel 2 should have setting 9");
   IsTrue("Wheel 3: letters", test.get_wheel_letters(2) == w_version[2].first,
          "Wheel 3 should have the correct letters associated with it");
   IsTrue("Wheel 3: pos", test.get_wheel_pos(2) == 'X' - off,
          "Wheel 3 should be at position X");
   IsTrue("Wheel 3: turn", test.get_wheel_turn(2) == w_version[2].second,
          "Wheel 3 should turnover at position W");
+  IsTrue("Wheel 3: setting", test.get_wheel_setting(2) == 13,
+         "Wheel 3 should have setting 13");
   IsTrue("Reflector", test.get_ref_letters() == r_version[2],
          "Reflector should have correct letters associated with it");
 } TEST_END
@@ -92,18 +105,24 @@ TEST_BEGIN("3Z, 4F, 5M, B") {
          "Wheel 1 should be at position Z");
   IsTrue("Wheel 1: turn", test.get_wheel_turn(0) == w_version[2].second,
          "Wheel 1 should turnover at position W");
+  IsTrue("Wheel 1: setting", test.get_wheel_setting(0) == 19,
+         "Wheel 1 should have setting 19");
   IsTrue("Wheel 2: letters", test.get_wheel_letters(1) == w_version[3].first,
          "Wheel 2 should have the correct letters associated with it");
   IsTrue("Wheel 2: pos", test.get_wheel_pos(1) == 'F' - off,
          "Wheel 2 should be at position F");
   IsTrue("Wheel 2: turn", test.get_wheel_turn(1) == w_version[3].second,
          "Wheel 2 should turnover at position K");
+  IsTrue("Wheel 2: setting", test.get_wheel_setting(1) == 3,
+         "Wheel 2 should have setting 3");
   IsTrue("Wheel 3: letters", test.get_wheel_letters(2) == w_version[4].first,
          "Wheel 3 should have the correct letters associated with it");
   IsTrue("Wheel 3: pos", test.get_wheel_pos(2) == 'M' - off,
          "Wheel 3 should be at position M");
   IsTrue("Wheel 3: turn", test.get_wheel_turn(2) == w_version[4].second,
          "Wheel 3 should turnover at position A");
+  IsTrue("Wheel 3: setting", test.get_wheel_setting(2) == 17,
+         "Wheel 3 should have setting 17");
   IsTrue("Reflector", test.get_ref_letters() == r_version[1],
          "Reflector should have the correct letters associated with it");
 } TEST_END
@@ -117,16 +136,22 @@ TEST_BEGIN("Garbage input. 2B, 3D, 5S, A") {
          "Wheel 1 should be at position B");
   IsTrue("Wheel 1: turn", test.get_wheel_turn(0) == w_version[1].second,
          "Wheel 1 should turnover at position F");
+  IsTrue("Wheel 1: setting", test.get_wheel_setting(0) == 10,
+         "Wheel 1 should have setting 10");
   IsTrue("Wheel 2: letters", test.get_wheel_letters(1) == w_version[2].first,
          "Wheel 2 should have the correct letters associated with it");
   IsTrue("Wheel 2: pos", test.get_wheel_pos(1) == 'D' - off,
          "Wheel 2 should be at position D");
   IsTrue("Wheel 2: turn", test.get_wheel_turn(1) == w_version[2].second,
          "Wheel 2 should turnover at position W");
+  IsTrue("Wheel 2: setting", test.get_wheel_setting(1) == 16,
+         "Wheel 2 should have setting 16");
   IsTrue("Wheel 3: letters", test.get_wheel_letters(2) == w_version[4].first,
          "Wheel 3 should have the correct letters associated with it");
   IsTrue("Wheel 3: pos", test.get_wheel_pos(2) == 'S' - off,
          "Wheel 3: should turnover at position A");
+  IsTrue("Wheel 3: setting", test.get_wheel_setting(2) == 0,
+         "Wheel 3 should have setting 0");
   IsTrue("Reflector", test.get_ref_letters() == r_version[0],
          "Reflector should have the correct letters associated with it");
 } TEST_END
@@ -136,6 +161,10 @@ TEST_BEGIN("translate()") {
   IsTrue("A first", test1.translate("A") == "B", "A should map to B");
   IsTrue("A second", test1.translate("A") == "D", "A should map to D as the second letter");
   IsTrue("A third", test1.translate("A") == "Z", "A should map to Z as the third letter");
+  IsTrue("AAA", test1.translate("AAA") == "GOW", "Three more A's should yield GOW");
+  SETUP(test2);
+  IsTrue("AAA first", test2.translate("AAA") == "EWT", "Three A's should yield EWT");
+  IsTrue("AAA second", test2.translate("AAA") == "YXQ", "Three more A's should yield YXQ");
 } TEST_END
 
 TEST_BEGIN("Enigma Instuction Manual Test") {

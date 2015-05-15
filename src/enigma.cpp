@@ -5,6 +5,7 @@ Wheel* Enigma::init_wheels() {
   bool bad = true;
   int w[3];
   char o[3];
+  int s[3];
   while (bad) {
     cout << "Input 3 wheel numbers to use (1 - 5)." << endl;
     cin >> w[0] >> w[1] >> w[2];
@@ -31,10 +32,23 @@ Wheel* Enigma::init_wheels() {
       cout << "Must input capital letters" << endl;
     }
   }
+  bad = true;
+  while (bad) {
+    cout << "Input the ring setting for each wheel (1 - 26)." << endl;
+    cin >> s[0] >> s[1] >> s[2];
+    cin.clear(); //reset errors
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); //ignore extra
+    if ((s[0] >= 1 && s[0] <= 26) && (s[1] >= 1 && s[1] <= 26) &&
+        (s[2] >= 1 && s[2] <= 26)) {
+      bad = false; //input is good
+    } else {
+      cout << "Must input numbers between 1 and 26." << endl;
+    }
+  }
   Wheel* wheels = new Wheel [3];
   for (int i = 0; i < 3; i++) {
-    cout << "Using wheel " << w[i] << " with starting position " << o[i] <<endl;
-    wheels[i] = Wheel(w[i], o[i]);
+    cout << "Using wheel " << w[i] << " with starting position " << o[i] << " and tring setting " << s[i] << endl;
+    wheels[i] = Wheel(w[i], o[i], s[i]);
   }
   return wheels;
 }
@@ -111,6 +125,10 @@ char Enigma::get_wheel_turn(int whl) const {
   return wheels[whl].get_turn();
 }
 
+char Enigma::get_wheel_setting(int whl) const {
+  return wheels[whl].get_setting();
+}
+
 string Enigma::get_ref_letters() const {
   return reflector->get_letters();
 }
@@ -150,7 +168,7 @@ string Enigma::translate(string sentence) {
   string ret;
   for (unsigned int i = 0; i < size; i++) {
     char let = sentence[i];
-    //only trnalsate vaild characters. Other things just fall through
+    //only translate vaild characters. Other things just fall through
     if (let < 'A' || let > 'Z') {
       ret.push_back(let);
     } else {
@@ -159,6 +177,7 @@ string Enigma::translate(string sentence) {
       ret.push_back(temp);
     }
   }
+  cout << "final string: " << ret << endl;
   return ret;
 }
 

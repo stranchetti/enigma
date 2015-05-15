@@ -1,16 +1,19 @@
 #simple test
 1 2 3
 A A A
+1 1 1
 A
 
 #specific test
 1 2 3
 H D X
+6 10 14
 C
 
 #check different wheels
 3 4 5
 Z F M
+20 4 18
 B
 
 #garbage test
@@ -20,6 +23,10 @@ aaaaaaaaaaaaaaaa 92 45 aslkhf
 abcbd 34 23 23 sdsf
 A a a
 B D S
+asdlkdsfjhdg ?? ( 00asd
+9999999999999999999999
+123412 12 1
+11 17 1
 123 345
 v
 V
@@ -28,10 +35,17 @@ A
 #translate test
 1 2 3
 A A A
+1 1 1
+B
+
+1 2 3
+A A A
+2 2 2
 B
 
 #enigma instruction manual message
 2 1 3
-X M V
+A B L
+24 13 22
 A
 AMFINVPSTUWZ
