@@ -17,5 +17,11 @@ Reflector::Reflector(char letter) {
 }
 
 char Reflector::get_ref(char input) {
+  input %= 26;
+  //we need input to be positive so we have to use the same
+  //workaround as the other files
+  if (input < 0) {
+    input += 26;
+  }
   return letters[input] - 'A';
 }
