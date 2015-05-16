@@ -169,8 +169,32 @@ TEST_BEGIN("translate()") {
 
 TEST_BEGIN("Enigma Instuction Manual Test") {
   SETUP(test1);
-  IsTrue("translation", test1.translate(Readline(enc_file)) == Readline(dec_file),
+  string enc = Readline(enc_file);
+  string dec = Readline(dec_file);
+  IsTrue("translation", test1.translate(enc) == dec,
          "the first encrypted message should decrypt to the first decrypted message");
+  SETUP(test2);
+  IsTrue("encryption", test2.translate(dec) == enc,
+         "the first decrypted message should encrypt to the first encrypted message");
+} TEST_END
+
+TEST_BEGIN("Operation Barbarossa") {
+  SETUP(test1);
+  string enc1 = Readline(enc_file);
+  string enc2 = Readline(enc_file);
+  string dec1 = Readline(dec_file);
+  string dec2 = Readline(dec_file);
+  IsTrue("translation part 1", test1.translate(enc1) == dec1,
+         "The first encrypted message part should decrypt to the first decrypted message part");
+  SETUP(test2);
+  IsTrue("encryption part 1", test2.translate(dec1) == enc1,
+         "The first decrypted message part should encrypt to the first encryped message part");
+  SETUP(test3);
+  IsTrue("translation part 2", test3.translate(enc2) == dec2,
+         "The second encrypted message part should decrypt to the second decrypted message part");
+  SETUP(test4);
+  IsTrue("encryption part 2", test4.translate(dec2) == enc2,
+         "The second decrypted message part should encrypt to the first encrypted message part");
 } TEST_END
 
 SUITE_END
