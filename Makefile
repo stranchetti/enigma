@@ -11,7 +11,7 @@ enigma: wheel.o ref.o stecker.o enigma.o
 	$(CC) $(LFLAGS) -o $@ $^
 
 enigma.o: $(SOURCE)/enigma.cpp
-	$(CC) $(CFLAGS) $^
+	$(CC) $(CFLAGS) -D INTERACTIVE $^
 
 ref.o: $(SOURCE)/ref.cpp
 	$(CC) $(CFLAGS) $^
@@ -35,7 +35,7 @@ stecker_test: UTFramework.o stecker.o $(TEST)/stecker_test.cpp
 	$(CC) $(LFLAGS) $(UTFLAGS) -o $@ $^
 
 etest.o: $(SOURCE)/enigma.cpp
-	$(CC) $(CFLAGS) -D TESTING -o $@ $^
+	$(CC) $(CFLAGS) -D TESTING -D INTERACTIVE -o $@ $^
 
 enigma_test: UTFramework.o ref.o wheel.o stecker.o etest.o $(TEST)/enigma_test.cpp
 	$(CC) $(LFLAGS) $(UTFLAGS) -o $@ $^

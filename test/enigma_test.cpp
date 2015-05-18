@@ -7,6 +7,8 @@
 #include "../src/ref.hpp"
 #include "../src/stecker.hpp"
 #include "UTFramework.h"
+#include <fstream>
+#include <typeinfo>
 
 using namespace Thilenius;
 
@@ -17,6 +19,7 @@ ofstream n_file; //dev null
 streambuf* in_orig; //cin stream
 streambuf* out_orig; //cout stream
 streambuf* d_null; //stream associated w/dev null
+invalid_argument ia = invalid_argument("I'm here for the testing");
 
 //custom get line method to read message from files
 string Readline(ifstream& file) {
@@ -31,6 +34,18 @@ string Readline(ifstream& file) {
   }
   return ret;
 }
+
+//macros to add a function to ensure something raised a desired exception
+//to Alec's test framework...
+#define RAISE_BEGIN try
+#define RAISE_END(t_name, ex_type)\
+  IsTrue(t_name, false, "Failed to raise " + string(ex_type) + " exception"); \
+  } catch (exception& ex) {\
+  if (typeid(ex).name() == ex_type) {\
+  IsTrue(t_name, true, "");\
+  } else {\
+    IsTrue(t_name, false, "Failed to raise " + string(ex_type) + " exception"); \
+  }
 
 SUITE_BEGIN("Enigma Test")
 
@@ -197,6 +212,102 @@ TEST_BEGIN("Operation Barbarossa") {
          "The second decrypted message part should encrypt to the first encrypted message part");
 } TEST_END
 
+TEST_BEGIN("Custom Constructor: 1A1 2A1 3A1 B") {
+  Enigma test = Enigma("1A1 2A1 3A1", "B", "");
+  IsTrue("Wheel 1: letters", test.get_wheel_letters(0) == w_version[0].first,
+         "Wheel 1 should have the correct letters associated with it.");
+  IsTrue("Wheel 1: pos", test.get_wheel_pos(0) == 0, 
+         "Wheel 1 should be at position A");
+  IsTrue("Wheel 1: turn", test.get_wheel_turn(0) == w_version[0].second, 
+         "Wheel 1 should have the correct turnover position");
+  IsTrue("Wheel 1: setting", test.get_wheel_setting(0) == 0, 
+         "Wheel 1 should be at setting 0");
+  IsTrue("Wheel 2: letters", test.get_wheel_letters(1) == w_version[1].first,
+         "Wheel 2 should have the correct letters associated with it");
+  IsTrue("Wheel 2: pos", test.get_wheel_pos(1) == 0, 
+         "Wheel 2 should be at position A");
+  IsTrue("Wheel 2: turn", test.get_wheel_turn(1) == w_version[1].second, 
+         "Wheel 2 should have the correct turnover position");
+  IsTrue("Wheel 2: setting", test.get_wheel_setting(1) == 0, 
+         "Wheel 2 should be at ring setting 0");
+  IsTrue("Wheel 3: letters", test.get_wheel_letters(2) == w_version[2].first,
+         "Wheel 3 should have the correct letters associated with it");
+  IsTrue("Wheel 3: pos", test.get_wheel_pos(2) == 0, 
+         "Wheel 3 should be at position A");
+  IsTrue("Wheel 3: turn", test.get_wheel_turn(2) == w_version[2].second, 
+         "Wheel 3 should have the correct turnover position");
+  IsTrue("Wheel 3: setting", test.get_wheel_setting(2) == 0, 
+         "Wheel 3 should be at ring setting 0");
+  IsTrue("Reflector", test.get_ref_letters() == r_version[1], 
+         "Reflector should have the correct letters associated with it");
+  IsTrue("Stecker", test.get_stecker_letters() == "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "Steckerboard should have no plugs");
+} TEST_END
+
+TEST_BEGIN("Custom Constructor: 5V14 3G2 4K22 C ABCDEF") {
+  Enigma test = Enigma("5V14 3G2 4K22", "C", "ABCDEF");
+  IsTrue("Wheel 1: letters", test.get_wheel_letters(0) == w_version[4].first,
+         "Wheel 1 should have the correct letters associated with it");
+  IsTrue("Wheel 1: pos", test.get_wheel_pos(0) == 'V' - 'A',
+         "Wheel 1 should be at position V");
+  IsTrue("Wheel 1: turn", test.get_wheel_turn(0) == w_version[4].second,
+         "Wheel 1 should have the correct turnover position");
+  IsTrue("Wheel 1: setting", test.get_wheel_setting(0) == 13,
+         "Wheel 1 should be at ring setting 13");
+  IsTrue("Wheel 2: letters", test.get_wheel_letters(1) == w_version[2].first,
+         "Wheel 2 should have the correct letters associated with it");
+  IsTrue("Wheel 2: pos", test.get_wheel_pos(1) == 'G' - 'A',
+         "Wheel 2 should be at position G");
+  IsTrue("Wheel 2: turn", test.get_wheel_turn(1) == w_version[2].second,
+         "Wheel 2 should have the correct turnover position");
+  IsTrue("Wheel 2: setting", test.get_wheel_setting(1) == 1,
+         "Wheel 2 should have ring setting 1");
+  IsTrue("Wheel 3: letters", test.get_wheel_letters(2) == w_version[3].first,
+         "Wheel 3 should have the correct letters associated with it");
+  IsTrue("Wheel 3: pos", test.get_wheel_pos(2) == 'K' - 'A',
+         "Wheel 3 should be at position K");
+  IsTrue("Wheel 3: turn", test.get_wheel_turn(2) == w_version[3].second,
+         "Wheel 3 should have the correct turnover position");
+  IsTrue("Wheel 3: setting", test.get_wheel_setting(2) == 21, 
+         "Wheel 3 should be at ring setting 21");
+  IsTrue("Reflector", test.get_ref_letters() == r_version[2],
+         "Reflector should have the correct letters associated with it");
+  IsTrue("Stecker", test.get_stecker_letters() == "BADCFEGHIJKLMNOPQRSTUVWXYZ", "Stecker should swap AB, CD, and EF");
+} TEST_END
+
+TEST_BEGIN("Custom Constructor Exceptions") {
+  RAISE_BEGIN {
+    Enigma test1 = Enigma("12A1 1A1 1A 1", "A", "");
+    RAISE_END("Bad wheel number", typeid(ia).name())
+  }
+  RAISE_BEGIN {
+    Enigma test2 = Enigma("1/1 1A1 1A1", "A", "");
+    RAISE_END("Bad wheel position", typeid(ia).name())
+  }
+  RAISE_BEGIN {
+    Enigma test3 = Enigma("1A100 1A1 1A1", "A", "");
+    RAISE_END("Bad ring setting", typeid(ia).name())
+  }
+  RAISE_BEGIN {
+    Enigma test4 = Enigma("1A1 1A1 1A1", "123", "");
+    RAISE_END("Bad reflector version", typeid(ia).name())
+  }
+  RAISE_BEGIN {
+    Enigma test5 = Enigma("1A1 1A1 1A1", "A", "11");
+    RAISE_END("Bad stecker input characters", typeid(ia).name())
+  }
+  RAISE_BEGIN {
+    Enigma test6 = Enigma("1A1 1A1 1A1", "A", "A");
+    RAISE_END("Uneven number of stecker letters", typeid(ia).name())
+  }
+  RAISE_BEGIN {
+    Enigma test7 = Enigma("1A1 1A1 1A1", "A", "ABCDDFERASHA");
+    RAISE_END("Duplicate letters in stecker input", typeid(ia).name())
+  }
+  RAISE_BEGIN {
+    Enigma test8 = Enigma("1A", "A", "");
+    RAISE_END("Not enough wheel arguments", typeid(ia).name())
+  }
+} TEST_END
 SUITE_END
 
 int main(int argc, char* argv[]) {

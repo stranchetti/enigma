@@ -36,5 +36,6 @@ public:
   char get_wheel_turn(int whl) const;
   char get_wheel_setting(int whl) const;
   string get_ref_letters() const;
+  string get_stecker_letters() const;
   string translate(string sentence);
 };
