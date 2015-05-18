@@ -6,27 +6,57 @@ Enigma::Enigma() {
   reflector = init_ref();
   stecker = init_stecker();
 #else
-  Enigma("1A1 2A1 3A1", "B", "");
+  wheels = new Wheel[3];
+  wheels[0] = Wheel(1, 'A', 1);
+  wheels[1] = Wheel(2, 'A', 1);
+  wheels[2] = Wheel(3, 'A', 1);
+  reflector = new Reflector('B');
+  stecker = new Stecker();
 #endif
 }
 
 Enigma::Enigma(string whls, string ref, string steck) {
   //check wheels
+  stringstream wheel_in(whls);
+  int w1, w2, w3, s1, s2, s3;
+  char p1, p2, p3;
+  wheel_in >> w1 >> p1 >> s1 >> w2 >> p2 >> s2 >> w3 >> p3 >> s3;
+  if (w1 < 1 || w1 > 5 || w2 < 1 || w2 > 5 || w3 < 1 || w3 > 5) {
+    throw invalid_argument("Wheel argument must use numbers between 1 and 5 for the wheel number");
+  } else if (p1 < 'A' || p1 > 'Z' || p2 < 'A' || p2 > 'Z' || p3 < 'A' || p3 > 'Z') {
+    throw invalid_argument("Wheel argument must use capital letters for the wheel position");
+  } else if (s1 < 1 || s1 > 26 || s2 < 1 || s2 > 26 || s3 < 1 || s3 > 26) {
+    throw invalid_argument("Wheel argument must use numbers between 1 and 26 for the ring setting");
+  } else {
+    wheels = new Wheel[3];
+    cout << w1 << ' ' << p1 << ' ' << s1 << endl;
+    cout << w2 << p2 << s2 << endl;
+    cout << w3 << p3 << s3 << endl;
+    wheels[0] = Wheel(w1, p1, s1);
+    wheels[1] = Wheel(w2, p2, s2);
+    wheels[2] = Wheel(w3, p3, s3);
+  }
   //check ref
   if (ref[0] < 'A' || ref[0] > 'C') {
-    reflector = NULL;
+    //reflector = NULL;
+    throw invalid_argument("Reflector argument must be captial A, B, or C");
   } else {
     reflector = new Reflector(ref[0]);
   }
   //check stecker
-  if (stecker_checker(steck) == 0) {
+  int res = stecker_checker(steck);
+  if (res == STECK_OK) {
     stecker = new Stecker();
     size_t size = steck.size();
     for (unsigned int i = 0; i < size; i += 2) {
       stecker->swap(steck[i], steck[i + 1]);
     }
+  } else if (res == STECK_BAD_INPUT) {
+    throw invalid_argument("Stecker argument must be capital letters only");
+  } else if (res == STECK_UNEVEN) {
+    throw invalid_argument("Stecker argument must have an even number of letters");
   } else {
-    stecker = NULL;
+    throw invalid_argument("Stecker argument may not contain duplicate letters");
   }
 }
 
@@ -117,7 +147,7 @@ Stecker* Enigma::init_steck() {
     cout << "Input letters to swap on the steckerboard (A - Z)." << endl;
     cout << "Every two letters will be swapped." << endl;
     getline(cin, in);
-    size_t size = in.size();
+    /*size_t size = in.size();
     //empty line means unsteckered and is automatically fine
     if (size == 0) {
       bad = false;
@@ -139,6 +169,16 @@ Stecker* Enigma::init_steck() {
       if (in != "") { //input is good if string hasn't been reset
         bad = false;
       }
+      }*/
+    int res = stecker_checker(in);
+    if (res == STECK_OK) {
+      bad = false;
+    } else if (res == STECK_UNEVEN) {
+      cout << "Must input an even number of letters." << endl;
+    } else if (res == STECK_BAD_INPUT) {
+      cout << "Must input capital letters only." << endl;
+    } else {
+      cout << "Duplicate letters are not allowed." << endl;
     }
   }
   //do swap here
@@ -150,7 +190,22 @@ Stecker* Enigma::init_steck() {
 }
 
 int Enigma::stecker_checker(string input) {
-  return 0;
+  size_t size = input.size();
+  if (size == 0) {
+    return STECK_OK;
+  } else if (size % 2 != 0) {
+    return STECK_UNEVEN;
+  } else {
+    int count[26] = {};
+    for (unsigned int i = 0; i < size; i++) {
+      if (input[i] < 'A' || input[i] > 'Z') {
+        return STECK_BAD_INPUT;
+      } else if (++count[input[i] - 'A'] > 1) {
+        return STECK_DUPLICATE;
+      }
+    }
+    return STECK_OK;
+  }
 }
 
 char Enigma::get_wheel_pos(int whl) const {
