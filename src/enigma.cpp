@@ -1,5 +1,41 @@
 #include "enigma.hpp"
 
+Enigma::Enigma() {
+#ifdef INTERACTIVE
+  wheels = init_wheels();
+  reflector = init_ref();
+  stecker = init_stecker();
+#else
+  Enigma("1A1 2A1 3A1", "B", "");
+#endif
+}
+
+Enigma::Enigma(string whls, string ref, string steck) {
+  //check wheels
+  //check ref
+  if (ref[0] < 'A' || ref[0] > 'C') {
+    reflector = NULL;
+  } else {
+    reflector = new Reflector(ref[0]);
+  }
+  //check stecker
+  if (stecker_checker(steck) == 0) {
+    stecker = new Stecker();
+    size_t size = steck.size();
+    for (unsigned int i = 0; i < size; i += 2) {
+      stecker->swap(steck[i], steck[i + 1]);
+    }
+  } else {
+    stecker = NULL;
+  }
+}
+
+Enigma::~Enigma() {
+  delete [] wheels;
+  delete reflector;
+  delete stecker;
+}
+
 //set up array of wheels. Returns pointer to the array
 Wheel* Enigma::init_wheels() {
   bool bad = true;
@@ -111,6 +147,10 @@ Stecker* Enigma::init_steck() {
     ret->swap(in[i], in[i + 1]);
   }
   return ret;
+}
+
+int Enigma::stecker_checker(string input) {
+  return 0;
 }
 
 char Enigma::get_wheel_pos(int whl) const {
