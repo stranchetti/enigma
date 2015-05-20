@@ -7,3 +7,6 @@
 #executables
 enigma
 *_test
+
+#library objects
+libenigma.*
