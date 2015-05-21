@@ -3,6 +3,7 @@ CXX= g++
 CXXFLAGS= -c -Wall -g
 LFLAGS= -Wall -g
 UTFLAGS= -pthread
+SHELL= /bin/bash
 
 #Various directory names
 SOURCE_DIR= src
@@ -20,7 +21,7 @@ VERSION= 0.1
 LIB= lib/libenigma.a
 LIB_SO= $(patsubst %.a, %.so.$(VERSION), $(LIB))
 
-.PHONY: clean test all
+.PHONY: clean test all lib check
 
 all: lib test
 
@@ -29,6 +30,7 @@ all: lib test
 ###################################
 
 #Interactive executable
+enigma: CXXFLAGS += -D DEBUG
 enigma: wheel.o ref.o stecker.o eint.o
 	$(CXX) $(LFLAGS) -o $@ $^
 
@@ -93,6 +95,13 @@ install: all
 uninstall:
 	rm -f $(LIB_INSTALL_DIR)/$(notdir $(LIB)) $(LIB_INSTALL_DIR)/$(notdir $(LIB_SO))
 	rm -f $(foreach file, $(notdir $(HEADERS)), $(HEADER_INSTALL_DIR)/$(file))
+
+#########################
+#Run the test executables
+#########################
+
+check: test
+	$(SHELL) ./test/runner.sh
 
 #############################
 #The destroyer of rouge files
