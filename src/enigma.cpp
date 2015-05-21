@@ -213,7 +213,7 @@ char Enigma::trans(char letter) {
   wheels[2].whl_turn();
   //send through steckerboard and make it initial wheel offset
   char input = stecker->get_char(letter) - 'A';
-  cout << "input: " << int(input) << endl;
+  D_PRINT("input: %d", (int) input);
   char out = 0;
   //run letter through wheels from right to left
   for (int i = 2; i >= 0; i--) {
@@ -221,17 +221,17 @@ char Enigma::trans(char letter) {
       if (i != 0) wheels[i - 1].whl_turn(); //turn over wheel to left
     }
     input = out;
-    cout << "Wheel " << i + 1 << " Out: " << char(out + 'A' + wheels[i].get_pos()) << endl;
+    D_PRINT("Wheel %d Out: %c", i + 1, (char) (out + 'A' + wheels[i].get_pos()));
   }
   //reflector
   input = reflector->get_ref(input);
-  cout << "After reflection: " << char(input + 'A') << endl;
+  D_PRINT("After reflection: %c", (char) (input + 'A'));
   //run letters through wheels from left to right
   //note that we also have to "translate" backwards as well
   for (int i = 0; i < 3; i++) {
     wheels[i].get_whl_rev(input, &out);
     input = out;
-    cout << "Wheel " << i + 1 << " Out: " << char(out + 'A' + wheels[i].get_pos()) << endl;
+    D_PRINT("Wheel %d Out: %c", i + 1, (char) (out + 'A' + wheels[i].get_pos()));
   }
   return stecker->get_char_rev(out);
 }
@@ -247,11 +247,11 @@ string Enigma::translate(string sentence) {
       ret.push_back(let);
     } else {
       char temp = trans(let);
-      cout << "letter after translation: " << temp << endl;
+      D_PRINT("letter after translation: %c", temp);
       ret.push_back(temp);
     }
   }
-  cout << "final string: " << ret << endl;
+  D_PRINT("final string: %s", ret.c_str());
   return ret;
 }
 

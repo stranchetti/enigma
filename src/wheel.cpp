@@ -55,7 +55,8 @@ bool Wheel::get_whl(char input, char* out) {
   if (map < 0) {
     map += 26;
   }
-  cout << "wheel input: " << (char) ('A' + map) << endl;
+  //cout << "wheel input: " << (char) ('A' + map) << endl;
+  D_PRINT("wheel input: %c", (char) ('A' + map));
   //apply the ring setting to the mapping
   map = (map - setting) % 26;
   if (map < 0) {
@@ -63,7 +64,8 @@ bool Wheel::get_whl(char input, char* out) {
   }
   char letter = letters[map] - 'A' + setting;
   letter %= 26;
-  cout << "letter before return: " << (char) ('A' + letter) << endl;
+  //cout << "letter before return: " << (char) ('A' + letter) << endl;
+  D_PRINT("letter before return: %c", (char) ('A' + letter));
   *out = letter - pos;
   return ret;
 }
@@ -78,7 +80,8 @@ void Wheel::get_whl_rev(char input, char* out) {
   char in_letter = temp + 'A';
   char index = letters.find(in_letter);
   index = (index + setting) % 26;
-  cout << "letter before return: " << (char) (index + 'A') << endl;
+  //cout << "letter before return: " << (char) (index + 'A') << endl;
+  D_PRINT("letter before return: %c", (char) (index + 'A'));
   *out = index - pos;
 }
 

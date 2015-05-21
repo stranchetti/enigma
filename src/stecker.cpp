@@ -27,7 +27,7 @@ char Stecker::get_char(char input) {
 //convert it to a mapping where the current position of the wheel maps to
 //the letter A, which is how the stecker works
 char Stecker::get_char_rev(char input) {
-  cout << "stecker input: " << (int) input << endl;
+  D_PRINT("stecker input: %d", (int) input);
   char temp;
   //workaround for negative % 26. C++ will give a negative result, but
   //we need a positive one
@@ -36,6 +36,6 @@ char Stecker::get_char_rev(char input) {
   } else {
     temp = input % 26 + 'A';
   }
-  cout << "character to search for: " << temp << endl;
+  D_PRINT("character to search for: %c", temp);
   return out.find(temp) + 'A';
 }

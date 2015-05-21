@@ -2,6 +2,7 @@
 #define _WHEEL_H
 #include <string>
 #include <utility>
+#include "debug.hpp"
 using namespace std;
 
 typedef pair<string, char> entry;

@@ -6,6 +6,7 @@
 #include "wheel.hpp"
 #include "ref.hpp"
 #include "stecker.hpp"
+#include "debug.hpp"
 using namespace std;
 
 //terminal colors

@@ -2,6 +2,7 @@
 #define _STECKER_H
 #include <string>
 #include <iostream>
+#include "debug.hpp"
 using namespace std;
 
 class Stecker {
