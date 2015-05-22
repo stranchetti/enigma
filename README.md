@@ -80,4 +80,12 @@ These three reflector versions are the most common reflectors used. A and B were
 </table>
 
 #Obtaining and building the code#
-Either download the code as a zip file and extract it to your desired location or clone the git repository. Once this is done, you can simply type `make` in your terminal of choice to build the simulator.
+Either download the code as a zip file and extract it to your desired location or clone the git repository. There are two options for building the code. The first option creates an interactive executable that allows you to translate messages on the fly. The second option creates a library that allows you to create and use Enigma machine encryption in programs you write.
+
+### Interactive executable ###
+This option is created by simply typing `make enigma` in your terminal of choice. This creates an exectuable file named **enigma** that will allow you to interactively create and translate messages.
+
+### Enigma Library ###
+*NOTE:* The installation of this library is currently Linux specific. You can use the library on other platforms by adding the path to the library to your linker path manually, or hand-moving the files to the appropriate system folders.
+
+This option is built using the standard method for building and installing libraries. Simply type `make` to build all the necessary files and then `make install` to move the necessary library files and headers into the system folders. Between these two commands, you may with to type `make check` to run the unit test executables to check the functionality of the built files.
